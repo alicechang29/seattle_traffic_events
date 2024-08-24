@@ -1,0 +1,22 @@
+{
+  "name": "seattle_traffic_events",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run server.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.7",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/figlet": "^1.5.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "figlet": "^1.7.0"
+  }
+}
