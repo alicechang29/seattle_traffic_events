@@ -5,6 +5,14 @@ Next steps:
 - add in error handlings
 - get data
 
+### Data Gathering
+
+I need:
+
+- schedule (date and time)
+- weather (bad weather = extra time)
+- each day, need to check game status (every hour for canceled, rescheduled)
+
 ### P1
 
 Outcomes of P1:
