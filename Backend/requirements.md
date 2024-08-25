@@ -1,11 +1,27 @@
 Next steps:
 
+- parse seahawks json data to get the data i need
+- create api to get the data
+
+Completed Tasks:
+
 - define TS schema
 - fix type errors within app.ts
 - add in error handlings
 - get data
 
+### References
+
+https://bun.sh/guides/ecosystem/express
+
 ### Data Gathering
+
+to find the team i need:
+
+- go to espn site and get the team "nickname"
+- hit this endpoint and replace the nickname: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${nickname}
+- get the team id from ^^
+- lookup the schedule with, replacing id: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${id}/schedule?season=2024&seasontype=2
 
 I need:
 
