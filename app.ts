@@ -1,6 +1,9 @@
 import express from "express";
+import type { Request, Response, NextFunction } from "express";
 import cors from "cors";
-// import { NotFoundError } from "./expressError.js";
+import { NotFoundError } from "./expressError.ts";
+import type { IExpressError } from "./expressError.ts";
+
 
 // const express = require('express');
 const app = express();
@@ -34,7 +37,7 @@ app.use(function (req, res, next) {
 });
 
 /** Generic error handler; anything unhandled goes here. */
-app.use(function (err, req, res, next) {
+app.use(function (err: IExpressError, req: Request, res: Response, next: NextFunction) {
   if (process.env.NODE_ENV !== "test") console.error(err.stack);
   const status = err.status || 500;
   const message = err.message;
