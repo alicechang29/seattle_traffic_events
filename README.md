@@ -4,11 +4,12 @@ Start server:
 Start server in watch mode:
 `bun --watch server.ts`
 
-## Reminders
+Setup DB:
 
-Starting new file:
-Install Bun:
-`npm install -g bun`
+1. Create DB: `createdb seattleEvents`
+2. Run: `psql -f schema.sql seattleEvents`
+
+## Reminders
 
 Install Package:
 
