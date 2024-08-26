@@ -14,6 +14,14 @@ Returns a list of events that are home games ("@ SEA" within shortName)
       description: "Scheduled",
       detail: "Sun, September 8th at 4:05 PM EDT",
       shortDetail: "9/8 - 4:05 PM EDT",
+    },
+    venue: {
+      name: "Lumen Field",
+      address: {
+              city: "Seattle",
+              state: "WA",
+              zipCode: "98134",
+            }
     }
   },...
 ]
@@ -29,9 +37,10 @@ function parseNFLData(nflData: espnAPIData): espnEvents {
   for (const event of eventData) {
     const { name, date, shortName, competitions } = event;
     const status = competitions[0].status.type;
+    const venue = competitions[0].venue;
 
     if (shortName.includes("@ SEA")) {
-      nflEvents.push({ name, date, shortName, status });
+      nflEvents.push({ name, date, shortName, status, venue });
     }
   }
 
