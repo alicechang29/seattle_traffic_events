@@ -1,58 +1,60 @@
 import { parseNFLData } from "../helpers/parseNFLData";
 import { TrafficEvent } from "../models/trafficEvents";
-// import express from "express";
+import { BadRequestError } from "../expressError";
+import { Router } from "express";
 
-// const app = express();
-// const port = 8080;
+const router = Router();
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
+const BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
 
-// app.listen(port, () => {
-//   console.log(`Listening on port ${port}...`);
-// });
-
-//fetch nfl data from ESPN
-
-
-const BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/teams/${teamId}/schedule?season=${season}&seasontype=2`;
-
-/** requests nfl event data (for seahawks in this iteration) and adds events to DB
- * @param
- * @returns
+/** GET /events/nfl-seahawks from ESPN API
+ * returns parsed nfl data
  */
-
-async function requestSeahawksEvents() {
-  //TODO: put this in the model and just feed sport team name and sport
+router.get("/nfl-seahawks", async (req, res) => {
+  console.log("get seahawks data");
   const teamId: number = 26;
   const season: number = 2024;
   const sport: string = "football";
   const league: string = "nfl";
+  try {
+    const response = await fetch(`${BASE_API_URL}/${sport}/${league}/teams/${teamId}/schedule?season=${season}&seasontype=2`);
 
-  const data = await fetch(BASE_API_URL);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  //TODO: add to DB
-  const nflEvents = parseNFLData(data);
+    const data = await response.json();
 
-  for (let event of nflEvents) {
-    TrafficEvent.create(event); //FIXME: fix the type
+    const parsedData = parseNFLData(data);
+    res.json(parsedData);
+
+    //TODO: best way to create events in DB?
+    // possibly just turn this to a post route and add events data directly to DB
+
+  } catch (e) {
+    console.error("Error fetching data from ESPN API:", e);
+    throw new BadRequestError();
   }
-
-
-}
-
-function requestMarinersEvents() {
-
-}
-
-function requestKrakenEvents() {
-
-}
-
-
-await fetch(BASE_API_URL, {
-  // The URL of the proxy server
-  proxy: "https://username:password@proxy.example.com:8080",
 });
+
+router.post("/", async function () {
+  //   //TODO: add to DB
+  //   const nflEvents = parseNFLData(data);
+
+  //   for (let event of nflEvents) {
+  //     TrafficEvent.create(event); //FIXME: fix the type
+  //   }
+});
+
+
+// function requestMarinersEvents() {
+
+// }
+
+// function requestKrakenEvents() {
+
+// }
+
+export default router;
+
 
