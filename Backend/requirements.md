@@ -1,7 +1,16 @@
 Next steps:
 
 - finish unit test for parseNFLData
+- trafficEvent - MODEL
+  - decide what fields are needed from status and venue objects (don't want to store as objects)
+  - should i have venue as a separate model
+  - create a db
+  - fix db config
+  - test the traffic Event create method on the model
 - create api to get the data
+  - FIXME: fix issues in routes/trafficEvents
+  - test the fetch call
+  - make the fn more generic, add params
 
 Completed Tasks:
 
