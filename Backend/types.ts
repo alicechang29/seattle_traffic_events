@@ -3,6 +3,13 @@ export type ErrorStatus = number;
 export type espnAPIData = Record<string, any>;
 export type espnEvents = Record<string, any>[];
 
+export interface tTrafficEvent {
+  name: string,
+  date: string,
+  shortName: string,
+  status: Record<string, any>,
+  venue: Record<string, any>;
+}
 export interface EspnNFLEventResponse {
   events: EspnNFLEvent[];
 }
