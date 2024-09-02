@@ -1,18 +1,25 @@
-Next steps:
+#### Next steps:
 
+- change get nfl event to be a post and add to DB
+- write test for route
 - finish unit test for parseNFLData
 - trafficEvent - MODEL
+
   - decide what fields are needed from status and venue objects (don't want to store as objects)
   - should i have venue as a separate model
-  - create a db
-  - fix db config
   - test the traffic Event create method on the model
-- create api to get the data
-  - FIXME: fix issues in routes/trafficEvents
-  - test the fetch call
-  - make the fn more generic, add params
 
-Completed Tasks:
+#### ON HOLD:
+
+- make the fn more generic in routes, add params
+
+#### Completed Tasks:
+
+- fix db config
+- create a db: seattle_traffic_events / seattle_traffic_events_test
+- create api to get the nfl data
+- fix issues in routes/trafficEvents
+- test the fetch call
 
 - parse seahawks json data to get the data i need
 
