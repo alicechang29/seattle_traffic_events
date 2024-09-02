@@ -3,32 +3,14 @@ import type { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { NotFoundError } from "./expressError.ts";
 import type { IExpressError } from "./expressError.ts";
+import trafficEvents from "./routes/trafficEvents.ts";
 
-
-// const express = require('express');
 const app = express();
-// allow both form-encoded and json body parsing
 app.use(express.json());
 app.use(express.urlencoded());
-// allow connections to all routes from any browser
 app.use(cors());
 
-
-//ROUTES
-app.get('/', function (req, res) {
-  res.send({
-    hello: "world"
-  });
-});
-
-app.post('/', function (req, res) {
-  const name = req.body.name || "there";
-  res.send({
-    hello: name
-  });
-});
-
-
+app.use("/events", trafficEvents);
 
 
 /** Handle 404 errors -- this matches everything */
