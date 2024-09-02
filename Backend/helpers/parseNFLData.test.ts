@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { parseNFLData } from "./parseNFLData";
 
-const path = "../data/seahawks.json";
+const path = "./data/seahawks.json";
 const file = Bun.file(path);
 const contents = await file.json();
 
