@@ -1,5 +1,8 @@
 #### Next steps:
 
+- add in logic for filterEspnDataByDate helper
+- test the route
+
 - change get nfl event to be a post and add to DB
 - write test for route
 - finish unit test for parseNFLData
@@ -82,6 +85,29 @@ Outcomes of P1:
 
 - Pull in data from API and display in a table view
 - Unit tests
+
+#### Routes
+
+forward the request to controller functions
+
+- GET
+  - today's events
+  - next 3 days
+  - this week's events
+  - this month's events
+
+#### Controllers
+
+get the reqeusted information from the models
+
+#### Services
+
+Interacts with external APi's / DB's
+contains business logic and data manipulation logic
+
+#### Views
+
+render the view
 
 #### Data Structure
 

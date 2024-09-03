@@ -2,58 +2,33 @@ import { parseNFLData } from "../helpers/parseNFLData";
 import { TrafficEvent } from "../models/trafficEvents";
 import { BadRequestError } from "../expressError";
 import { Router } from "express";
+import { fetchSeahawksDataFromEspnApi } from "../controllers/trafficEvents";
 
 const router = Router();
 
-const BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
-
-/** GET /events/nfl-seahawks from ESPN API
- * returns parsed nfl data
+/** GET /today
+ * Returns all events today
  */
-router.get("/nfl-seahawks", async (req, res) => {
-  console.log("get seahawks data");
-  const teamId: number = 26;
-  const season: number = 2024;
-  const sport: string = "football";
-  const league: string = "nfl";
+router.get("/today", async (req, res) => {
+  console.log("GET/ today's events");
+
+  //2024-09-03T18:21:03.531Z --> '2024-09-03'
+  const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+  const startDate = new Date(today);
+
+  const endDate = new Date(today);
+  endDate.setDate(startDate.getDate() + 1);
+
   try {
-    const response = await fetch(`${BASE_API_URL}/${sport}/${league}/teams/${teamId}/schedule?season=${season}&seasontype=2`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    const parsedData = parseNFLData(data);
-    res.json(parsedData);
-
-    //TODO: best way to create events in DB?
-    // possibly just turn this to a post route and add events data directly to DB
+    const seahawksData = await fetchSeahawksDataFromEspnApi(req, res, startDate, endDate);
 
   } catch (e) {
-    console.error("Error fetching data from ESPN API:", e);
+    console.error("Issue with fetching today's events", e);
     throw new BadRequestError();
   }
+
 });
 
-router.post("/", async function () {
-  //   //TODO: add to DB
-  //   const nflEvents = parseNFLData(data);
-
-  //   for (let event of nflEvents) {
-  //     TrafficEvent.create(event); //FIXME: fix the type
-  //   }
-});
-
-
-// function requestMarinersEvents() {
-
-// }
-
-// function requestKrakenEvents() {
-
-// }
 
 export default router;
 

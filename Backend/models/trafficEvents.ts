@@ -1,4 +1,4 @@
-import db from "../db.js";
+import db from "../db.ts";
 import { BadRequestError, NotFoundError } from "../expressError.ts";
 import type { tTrafficEvent } from "../types.ts";
 
