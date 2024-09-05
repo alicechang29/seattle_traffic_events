@@ -1,4 +1,4 @@
-import type { espnAPIData, espnEvents } from "../types.ts";
+import type { espnAPIData, espnEvent, espnEvents, EspnNFLEvent, tTrafficEvent } from "../types.ts";
 /**
 Given NFL schedule data that looks like seahawks.json
 Returns a list of events that are home games ("@ SEA" within shortName)
@@ -6,41 +6,39 @@ Returns a list of events that are home games ("@ SEA" within shortName)
     name: "Denver Broncos at Seattle Seahawks",
     date: "2024-09-08T20:05Z",
     shortName: "DEN @ SEA",
-    status: {
-      id: "1",
-      name: "STATUS_SCHEDULED",
-      state: "pre",
-      completed: false,
-      description: "Scheduled",
-      detail: "Sun, September 8th at 4:05 PM EDT",
-      shortDetail: "9/8 - 4:05 PM EDT",
-    },
-    venue: {
-      name: "Lumen Field",
-      address: {
-              city: "Seattle",
-              state: "WA",
-              zipCode: "98134",
-            }
-    }
+    statusValue: "STATUS_SCHEDULED",
+    statusCompleted: false,
+    venue: "Lumen Field",
+    zipcode: "98134"
   },...
 ]
 */
-
-function parseNFLData(nflData: espnAPIData): espnEvents {
+//FIXME: fix teh espnEvent type
+function parseNFLData(nflData: espnAPIData): espnEvent[] {
   console.log("parseNFLData");
 
-  const nflEvents: espnEvents = [];
+  const nflEvents: espnEvent[] = [];
 
-  const eventData = nflData.events;
+  const eventData: EspnNFLEvent[] = nflData.events; //original event data from espn api
 
   for (const event of eventData) {
     const { name, date, shortName, competitions } = event;
-    const status = competitions[0].status.type;
-    const venue = competitions[0].venue;
+    const startDate = date;
+    const statusValue = competitions[0].status.type.name;
+    const statusCompleted = competitions[0].status.type.completed;
+    const venue = competitions[0].venue.fullName;
+    const zipcode = competitions[0].venue.address.zipCode;
 
     if (shortName.includes("@ SEA")) {
-      nflEvents.push({ name, date, shortName, status, venue });
+      nflEvents.push({
+        name,
+        startDate,
+        shortName,
+        statusValue,
+        statusCompleted,
+        venue,
+        zipcode
+      });
     }
   }
 
