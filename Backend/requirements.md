@@ -1,5 +1,28 @@
 #### Next steps:
 
+START HERE
+
+- Handle updates using a PUT request
+- Remove service layer
+
+Notes:
+Well, I have maybe one bit of helpful information - don't think too hard about "service layer" and "controller layer". There are 2 things you want to have as specific, isolated components:
+
+- The data model
+- Anything that is for the benefit of the front end (assembling things, formatting, etc)
+
+And any "business logic" that isn't clearly part of those 2 things, goes somewhere else.
+
+things having to do with authentication and authorization are a fuzzy choice, but ideally you rely on the framework for that
+
+But the starting point thing to do is to have your application "filter" out dates which have happened already (e.g. query for things based on date). And if you care about the database getting too big over time, you have something that runs on a schedule and deletes the "old" stuff
+
+if your goal is to have a database of events, with information that matches what is in whatever sources, including updates, then something like that is what you do. Do you remember when we talked about PUT vs PATCH in REST APIs before? A tool that fetched events from someplace and then updated your local database using a REST API is the kind of use case where you use PUT, because you want to make your local record look like the current state of the source record.
+
+---
+
+- Write a readme
+
 - add in logic for filterEspnDataByDate helper
 - test the route
 
@@ -54,6 +77,20 @@
          "isTBDFlex": true
        }
     ```
+
+##### status.name values:
+
+- STATUS_SCHEDULED
+- STATUS_COMPLETED
+- STATUS_IN_PROGRESS
+
+##### status.completed
+
+- true
+- false
+
+venue.fullName "YANKEE STADIUM"
+venue.address.zipcode
 
 - define TS schema
 - fix type errors within app.ts
