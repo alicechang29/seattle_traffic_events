@@ -2,7 +2,7 @@ import { parseNFLData } from "../helpers/parseNFLData";
 import { TrafficEvent } from "../models/trafficEvents";
 import { BadRequestError } from "../expressError";
 import { Router } from "express";
-import { fetchSeahawksDataFromEspnApi } from "../controllers/trafficEvents";
+import { getSeahawksData } from "../controllers/trafficEvents";
 
 const router = Router();
 
@@ -20,7 +20,9 @@ router.get("/today", async (req, res) => {
   endDate.setDate(startDate.getDate() + 1);
 
   try {
-    const seahawksData = await fetchSeahawksDataFromEspnApi(req, res, startDate, endDate);
+    const seahawksData = await getSeahawksData(req, res, startDate, endDate);
+    //TODO: in the future when there is more event data, controller handles putting all events for today together
+    return res.status(201).json({ seahawksData });
 
   } catch (e) {
     console.error("Issue with fetching today's events", e);
