@@ -4,13 +4,13 @@ import { BadRequestError } from '../expressError.ts';
 import { filterEspnDataByDate } from '../helpers/filterEspnDataByDate.ts';
 import { type espnEvents } from '../types.ts';
 
-export const fetchSeahawksDataFromEspnApi = async (
+export const getSeahawksData = async (
   req: Request,
   res: Response,
   startDate: Date,
   endDate: Date): Promise<any> => {
 
-  console.log("controller/fetchSeahawksDataFromEspnApi");
+  console.log("controller/getSeahawksData");
 
   try {
     //call service to get data
