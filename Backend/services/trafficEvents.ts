@@ -1,11 +1,24 @@
 import { parseNFLData } from "../helpers/parseNFLData";
 import { BadRequestError } from "../expressError";
 // import { trafficEvent } from "../models/trafficEvents";
-import type { espnEvents, tTrafficEvent } from "../types";
+import type { espnEvent, tTrafficEvent } from "../types";
+import { TrafficEvent } from "../models/trafficEvents";
 
 const ESPN_BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
 
-/** Fetch seahawks data from espn API*/
+/** Fetch seahawks data from espn API
+ * Returns a list of events that are home games ("@ SEA" within shortName)
+  [{
+    name: "Denver Broncos at Seattle Seahawks",
+    date: "2024-09-08T20:05Z",
+    shortName: "DEN @ SEA",
+    statusValue: "STATUS_SCHEDULED",
+    statusCompleted: false,
+    venue: "Lumen Field",
+    zipcode: "98134"
+  },...
+]
+*/
 export const getSeahawksDataFromEspn = async (): Promise<any> => {
   console.log("Services/getSeahawksDataFromEspn");
 
@@ -20,9 +33,9 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
     const data = await response.json();
     console.log("SERVICES DATA", data);
 
-    const parsedData = parseNFLData(data);
+    const seahawkEvents = parseNFLData(data);
 
-    return parsedData;
+    return seahawkEvents;
 
   } catch (e) {
     console.error("Error fetching data from ESPN API:", e);
@@ -30,29 +43,42 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
   }
 };
 
-console.log(getSeahawksDataFromEspn());
 
-//save data fetched to DB
 
+/** Syncs existing DB data with newly fetched events data from ESPN.
+ * Creates new records in DB if event is new.
+ * Returns...?
+ */
 export const syncSeahawksData = async (): Promise<any> => {
   console.log("Services/syncSeahawksData");
 
-  //get the new data
-  const newSeahawksData: espnEvents = await getSeahawksDataFromEspn();
-  const existingSeahawksData: tTrafficEvent[] = await trafficEvent.getEvents();
+  try {
+    //get the new data
+    const fetchedSeahawksData: espnEvent[] = await getSeahawksDataFromEspn();
 
-  const newRecords = [];
-  const updateRecords = [];
+    //FIXME: redo this -- updates will happen more often than creates
+    //query DB first and get the event ID --> make an update
+    //else create event
+    for (const record of fetchedSeahawksData) {
 
-  for (const record of newSeahawksData) {
+      try {
+        //try creating a new record
+        const newEvent = await TrafficEvent.create(record);
+        console.log(`Created new event with ID: ${newEvent.id}`);
 
+      } catch (e: any) {
+        if (e.message && !isNaN(Number(e.message))) {
+          const id = Number(e.message);
+          const updatedEvent = await TrafficEvent.updateEvent(id, record);
+          console.log(`Updated event Id: ${updatedEvent.id}`);
+        } else {
+          console.error(`Error processing: ${e.message}`);
+        }
+
+      }
+    }
+  } catch (err) {
+    console.error("Error syncing Seahawks data:", err);
   }
-
-  //FIXME: handle this using a PUT request
-
-  //if name, date, status are same = duplicate and skip
-
-
-  //if name, date same = update -- TODO: handle later...
 
 };
