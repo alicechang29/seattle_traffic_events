@@ -13,11 +13,31 @@ bun add -d @types/express
 Run a file:
 `bun run parseNFLData.ts`
 
+## API Endpoints Flow
+
+Fetching new data from ESPN probably only happens 1x a season.
+Updating data from ESPN on existing records should happen everyday.
+
+FIXME: Sync Data:
+
+1. Fetch data from ESPN
+2. Try to get the event id (search by name/date)
+3. If event exists, update full record in DB
+4. Else create a new record in DB
+
+Querying DB:
+
+1. Query DB by dates
+2. Return results
+
 #### Next steps:
 
 START HERE
 
-- Handle updates using a PUT request
+- Handle data updates
+- Setup DB
+- GET events data
+- POST new events data
 - Remove service layer
 
 Notes:
@@ -35,8 +55,6 @@ But the starting point thing to do is to have your application "filter" out date
 if your goal is to have a database of events, with information that matches what is in whatever sources, including updates, then something like that is what you do. Do you remember when we talked about PUT vs PATCH in REST APIs before? A tool that fetched events from someplace and then updated your local database using a REST API is the kind of use case where you use PUT, because you want to make your local record look like the current state of the source record.
 
 ---
-
-- Write a readme
 
 - add in logic for filterEspnDataByDate helper
 - test the route
@@ -56,6 +74,7 @@ if your goal is to have a database of events, with information that matches what
 
 #### Completed Tasks:
 
+- Write a readme
 - fix db config
 - create a db: seattle_traffic_events / seattle_traffic_events_test
 - create api to get the nfl data
