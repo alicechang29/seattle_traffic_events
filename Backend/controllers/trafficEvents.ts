@@ -2,7 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import * as trafficEventsApiService from "../services/trafficEvents.ts";
 import { BadRequestError } from '../expressError.ts';
 import { filterEspnDataByDate } from '../helpers/filterEspnDataByDate.ts';
-import { type espnEvents } from '../types.ts';
+import { type espnEvent } from '../types.ts';
 
 export const getSeahawksData = async (
   req: Request,
@@ -14,7 +14,7 @@ export const getSeahawksData = async (
 
   try {
     //call service to get data
-    const data: espnEvents = await trafficEventsApiService.getSeahawksDataFromEspn();
+    const data: espnEvent = await trafficEventsApiService.getSeahawksDataFromEspn();
 
     const filteredEventsByDate = filterEspnDataByDate(data, startDate, endDate);
 
