@@ -1,6 +1,6 @@
-import type { espnEvents } from "../types";
+import type { espnEvent } from "../types";
 
-function filterEspnDataByDate(data: espnEvents, start: Date, end: Date) {
+function filterEspnDataByDate(data: espnEvent, start: Date, end: Date) {
 
   //exclude events where statusValue = "STATUS_COMPLETED"
 
