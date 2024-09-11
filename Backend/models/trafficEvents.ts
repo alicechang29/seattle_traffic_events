@@ -111,7 +111,7 @@ export class TrafficEvent {
    */
   static async updateEvent(eventId: number, data: espnEvent): Promise<any> {
     console.log("updateEvent");
-
+    //FIXME: existing record will have an ID but incoming record will not
     const { setCols, values } = sqlForPartialUpdate(
       data,
       {
@@ -130,3 +130,17 @@ export class TrafficEvent {
     `;
   }
 }
+
+
+console.log("GET EVENTS", await TrafficEvent.getEvents());
+console.log("SCHEDULED EVENTS", await TrafficEvent.getScheduledInProgressEvents());
+console.log("Update", await TrafficEvent.updateEvent(1, {
+  id: 1,
+  name: "Denver Broncos at Seattle Seahawks",
+  startdate: "2024-09-08T20:05:00.000Z",
+  shortname: "DEN @ SEA",
+  statusvalue: "STATUS_COMPLETED",
+  statuscompleted: false,
+  venue: "Lumen Field",
+  zipcode: "98134",
+}));
