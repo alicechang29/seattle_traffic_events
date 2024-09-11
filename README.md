@@ -25,5 +25,6 @@ The purpose of this app is to alert users to upcoming events in the Seattle area
 
 3. Setup DB:
 
-   1. Create DB: `createdb seattleEvents`
-   2. Run: `psql -f schema.sql seattleEvents`
+   1. Create DB: `createdb seattle_traffic_events`
+   2. Run: `psql -f Backend/data/schema.sql seattle_traffic_events`
+   3. Seed DB: `bun run Backend/data/seed.ts`
