@@ -34,7 +34,14 @@ Querying DB:
 
 START HERE
 
+- remove Zipcode from DB
+  - seed.ts
+  - seedData.json
+  - model
+  - type
 - Handle data updates
+  - FIXME: on MODEL: existing record will have an ID but incoming record will not for UPDATE
+  -
 - Setup DB
 - GET events data
 - POST new events data
