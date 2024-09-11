@@ -1,0 +1,99 @@
+{
+  "locations": [
+    {
+      "venue": "Lumen Field",
+      "zipcode": "98134",
+      "lat": 47.5952,
+      "long": -122.3316
+    },
+    {
+      "venue": "Climate Pledge Arena",
+      "zipcode": "98109",
+      "lat": 47.6227,
+      "long": -122.3541
+    }
+  ],
+  "traffic_events": [
+    {
+      "name": "Denver Broncos at Seattle Seahawks",
+      "start_date": "2024-09-08T20:05:00.000Z",
+      "short_name": "DEN @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Miami Dolphins at Seattle Seahawks",
+      "start_date": "2024-09-22T20:05:00.000Z",
+      "short_name": "MIA @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "New York Giants at Seattle Seahawks",
+      "start_date": "2024-10-06T20:25:00.000Z",
+      "short_name": "NYG @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "San Francisco 49ers at Seattle Seahawks",
+      "start_date": "2024-10-11T00:15:00.000Z",
+      "short_name": "SF @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Buffalo Bills at Seattle Seahawks",
+      "start_date": "2024-10-27T20:05:00.000Z",
+      "short_name": "BUF @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Los Angeles Rams at Seattle Seahawks",
+      "start_date": "2024-11-03T21:25:00.000Z",
+      "short_name": "LAR @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Arizona Cardinals at Seattle Seahawks",
+      "start_date": "2024-11-24T21:25:00.000Z",
+      "short_name": "ARI @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Green Bay Packers at Seattle Seahawks",
+      "start_date": "2024-12-16T01:20:00.000Z",
+      "short_name": "GB @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    },
+    {
+      "name": "Minnesota Vikings at Seattle Seahawks",
+      "start_date": "2024-12-22T21:05:00.000Z",
+      "short_name": "MIN @ SEA",
+      "status_value": "STATUS_SCHEDULED",
+      "status_completed": false,
+      "venue": "Lumen Field",
+      "zipcode": "98134"
+    }
+  ]
+}
