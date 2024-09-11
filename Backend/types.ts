@@ -1,14 +1,13 @@
 export type ErrorMessage = string;
 export type ErrorStatus = number;
 export type espnAPIData = Record<string, any>;
-export type espnEvents = Record<string, any>[];
 
 export interface espnEvent {
   name: string,
   startDate: Date,
   shortName: string,
   statusValue: string,
-  statusComplete: Boolean,
+  statusCompleted: Boolean,
   venue: string,
   zipcode: string;
 }
