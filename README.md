@@ -7,7 +7,19 @@ The purpose of this app is to alert users to upcoming events in the Seattle area
 
 ## Features
 
-...
+(WIP as of 9/16/24)
+
+Users can input:
+
+- starting location
+- ending destination
+- travel date and time
+- expected arrival time
+
+App can:
+
+- recommend how much extra travel time users should allocate based on events traffic
+- display upcoming events in today, 3 day, 1 week format
 
 ## Tech Stack
 
