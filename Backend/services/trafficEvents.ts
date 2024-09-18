@@ -3,6 +3,7 @@ import { BadRequestError } from "../expressError";
 // import { trafficEvent } from "../models/trafficEvents";
 import type { espnEvent, tTrafficEvent } from "../types";
 import { TrafficEvent } from "../models/trafficEvents";
+import e from "express";
 
 const ESPN_BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
 
@@ -31,7 +32,6 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
     const response = await fetch(`${ESPN_BASE_API_URL}/${sport}/${league}/teams/${teamId}/schedule?season=${season}&seasontype=2`);
 
     const data = await response.json();
-    console.log("SERVICES DATA", data);
 
     const seahawkEvents = parseNFLData(data);
 
@@ -52,33 +52,40 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
 export const syncSeahawksData = async (): Promise<any> => {
   console.log("Services/syncSeahawksData");
 
+  const summary = { updated: 0, created: 0 };
+
   try {
     //get the new data
     const fetchedSeahawksData: espnEvent[] = await getSeahawksDataFromEspn();
 
-    //FIXME: redo this -- updates will happen more often than creates
-    //query DB first and get the event ID --> make an update
-    //else create event
     for (const record of fetchedSeahawksData) {
-
+      console.log("RECORD", record);
       try {
-        //try creating a new record
-        const newEvent = await TrafficEvent.create(record);
-        console.log(`Created new event with ID: ${newEvent.id}`);
+        const existingEvent = await TrafficEvent.findEventByNameAndDate(
+          record.name,
+          new Date(record.startDate)
+        );
+        console.log("existing event", existingEvent);
 
-      } catch (e: any) {
-        if (e.message && !isNaN(Number(e.message))) {
-          const id = Number(e.message);
-          const updatedEvent = await TrafficEvent.updateEvent(id, record);
-          console.log(`Updated event Id: ${updatedEvent.id}`);
+        if (existingEvent) {
+          await TrafficEvent.updateEvent(existingEvent.id, record);
+          console.log(`Updated event with ID: ${existingEvent.id}`);
+          summary.updated++;
         } else {
-          console.error(`Error processing: ${e.message}`);
+          await TrafficEvent.create(record);
+          console.log(`Created event: ${record}`);
+          summary.created++;
         }
 
+      } catch (e) {
+        console.error("Seahawks data sync failed at the service level", e);
       }
     }
-  } catch (err) {
-    console.error("Error syncing Seahawks data:", err);
+  } catch (e) {
+    console.error("Error fetching data from ESPN API:", e);
   }
-
+  console.log(`Sync completed: ${summary.updated} updated, ${summary.created} created.`);
+  return summary;
 };
+//TODO: fix the trafficEvents.update fn
+console.log("TESTING SYNC", await syncSeahawksData());
