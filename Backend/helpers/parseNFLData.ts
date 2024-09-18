@@ -54,10 +54,10 @@ update the model
 // test
 // https://bun.sh/guides/read-file/json
 
-const path = "../data/seahawks.json";
-const file = Bun.file(path);
-const contents = await file.json();
+// const path = "../data/seahawks.json";
+// const file = Bun.file(path);
+// const contents = await file.json();
 
-console.log(parseNFLData(contents));
+// console.log(parseNFLData(contents));
 
 export { parseNFLData };
