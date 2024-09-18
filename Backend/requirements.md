@@ -13,6 +13,12 @@ bun add -d @types/express
 Run a file:
 `bun run parseNFLData.ts`
 
+## START
+
+- fix the update models function > bun run services/trafficEvents
+- write tests for all of services and models
+  don't move on until that's done...
+
 ## API Endpoints Flow
 
 Fetching new data from ESPN probably only happens 1x a season.
