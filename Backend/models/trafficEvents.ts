@@ -18,7 +18,7 @@ export class TrafficEvent {
       statusCompleted,
       venue,
       zipcode,
-    }: espnEvent) {
+    }: espnEvent): Promise<any> {
 
     console.log("models/TrafficEvent/create");
 
@@ -62,7 +62,7 @@ export class TrafficEvent {
   /**Gets all events.
     * Returns [{name,startDate,shortName,statusValue,statusCompleted,venue,zipcode},...]
    */
-  static async getEvents() {
+  static async getEvents(): Promise<any> {
     console.log("models/TrafficEvent/getEvents");
     const result = await db.query(`
       SELECT id,
@@ -83,7 +83,7 @@ export class TrafficEvent {
    *
    * Returns [{name,startDate,shortName,statusValue,statusCompleted,venue,zipcode},...]
   */
-  static async getScheduledInProgressEvents() {
+  static async getScheduledInProgressEvents(): Promise<any> {
     console.log("models/TrafficEvent/getScheduledInProgressEvents");
 
     const result = await db.query(`
@@ -102,6 +102,30 @@ export class TrafficEvent {
     return result.rows;
   }
 
+  /**Find event by name and date
+   * Returns {name,startDate,shortName,statusValue,statusCompleted,venue,zipcode}
+   * or undefined
+   */
+  static async findEventByNameAndDate(name: string, startDate: Date): Promise<any> {
+    console.log("models/TrafficEvent/findEventByNameAndDate");
+    const result = await db.query(`
+        SELECT id,
+              name,
+              start_date AS startDate,
+              short_name AS shortName,
+              status_value AS statusValue,
+              status_completed AS statusCompleted,
+              venue,
+              zipcode
+        FROM traffic_events
+        WHERE name = $1 AND start_date = $2`, [name, startDate]);
+
+    const trafficEvent = result.rows[0];
+
+    return trafficEvent;
+  }
+
+
   /**Update event data with 'data'.
    * Data can include {name,startDate,shortName,statusValue,statusCompleted,venue,zipcode}
    *
@@ -110,8 +134,8 @@ export class TrafficEvent {
    * Throws NotFoundError if not found.
    */
   static async updateEvent(eventId: number, data: espnEvent): Promise<any> {
-    console.log("updateEvent");
-    //FIXME: existing record will have an ID but incoming record will not
+    console.log("models/trafficEvents/updateEvent");
+    //FIXME: this is not done
     const { setCols, values } = sqlForPartialUpdate(
       data,
       {
@@ -132,15 +156,6 @@ export class TrafficEvent {
 }
 
 
-console.log("GET EVENTS", await TrafficEvent.getEvents());
-console.log("SCHEDULED EVENTS", await TrafficEvent.getScheduledInProgressEvents());
-console.log("Update", await TrafficEvent.updateEvent(1, {
-  id: 1,
-  name: "Denver Broncos at Seattle Seahawks",
-  startdate: "2024-09-08T20:05:00.000Z",
-  shortname: "DEN @ SEA",
-  statusvalue: "STATUS_COMPLETED",
-  statuscompleted: false,
-  venue: "Lumen Field",
-  zipcode: "98134",
-}));
+// console.log("GET EVENTS", await TrafficEvent.getEvents());
+// console.log("SCHEDULED EVENTS", await TrafficEvent.getScheduledInProgressEvents());
+// console.log("find by name and date", await TrafficEvent.findEventByNameAndDate("chicken", new Date("2024-09-08T13:05:00-07:00")));
