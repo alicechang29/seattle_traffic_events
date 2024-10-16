@@ -7,8 +7,6 @@ The purpose of this app is to alert users to upcoming events in the Seattle area
 
 ## Features
 
-(WIP as of 9/16/24)
-
 Users can input:
 
 - starting location
