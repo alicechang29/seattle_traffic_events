@@ -135,23 +135,38 @@ export class TrafficEvent {
    */
   static async updateEvent(eventId: number, data: espnEvent): Promise<any> {
     console.log("models/trafficEvents/updateEvent");
-    //FIXME: this is not done
+
     const { setCols, values } = sqlForPartialUpdate(
       data,
       {
+        name: "name",
         startDate: "start_date",
         shortName: "short_name",
         statusValue: "status_value",
         statusCompleted: "status_completed",
-        venueName: "venue_name"
+        venue: "venue",
+        zipcode: "zipcode"
       }
     );
+    const eventIdVarIdx = "$" + (values.length + 1);
 
-    const updateSqlQuery = `
-      UPDATE events
+    const sqlQuery = `
+      UPDATE traffic_events
       SET ${setCols}
-      WHERE id = ${eventId}
+      WHERE id = ${eventIdVarIdx}
+      RETURNING name, start_date AS "startDate", short_name AS "shortName",
+              status_value AS "statusValue", status_completed AS "statusCompleted",
+              venue, zipcode
     `;
+    const result = await db.query(sqlQuery, [...values, eventId]);
+
+    const event = result.rows[0];
+
+    if (!event) {
+      throw new NotFoundError(`No event found with id: ${eventId}`);
+    }
+
+    return event;
   }
 }
 
