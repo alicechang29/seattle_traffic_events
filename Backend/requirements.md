@@ -13,9 +13,22 @@ bun add -d @types/express
 Run a file:
 `bun run parseNFLData.ts`
 
+---
+
 ## START
 
-- fix the update models function > bun run services/trafficEvents
+- remove Zipcode from DB
+- add in logic for filterEspnDataByDate helper
+- test the route
+- change get nfl event to be a post and add to DB
+- write test for route
+- finish unit test for parseNFLData
+- trafficEvent - MODEL
+
+  - decide what fields are needed from status and venue objects (don't want to store as objects)
+  - should i have venue as a separate model
+  - test the traffic Event create method on the model
+
 - write tests for all of services and models
   don't move on until that's done...
 
@@ -24,7 +37,7 @@ Run a file:
 Fetching new data from ESPN probably only happens 1x a season.
 Updating data from ESPN on existing records should happen everyday.
 
-FIXME: Sync Data:
+Sync Data:
 
 1. Fetch data from ESPN
 2. Try to get the event id (search by name/date)
@@ -35,23 +48,6 @@ Querying DB:
 
 1. Query DB by dates
 2. Return results
-
-#### Next steps:
-
-START HERE
-
-- remove Zipcode from DB
-  - seed.ts
-  - seedData.json
-  - model
-  - type
-- Handle data updates
-  - FIXME: on MODEL: existing record will have an ID but incoming record will not for UPDATE
-  -
-- Setup DB
-- GET events data
-- POST new events data
-- Remove service layer
 
 Notes:
 Well, I have maybe one bit of helpful information - don't think too hard about "service layer" and "controller layer". There are 2 things you want to have as specific, isolated components:
@@ -69,24 +65,17 @@ if your goal is to have a database of events, with information that matches what
 
 ---
 
-- add in logic for filterEspnDataByDate helper
-- test the route
-
-- change get nfl event to be a post and add to DB
-- write test for route
-- finish unit test for parseNFLData
-- trafficEvent - MODEL
-
-  - decide what fields are needed from status and venue objects (don't want to store as objects)
-  - should i have venue as a separate model
-  - test the traffic Event create method on the model
-
 #### ON HOLD:
 
 - make the fn more generic in routes, add params
 
 #### Completed Tasks:
 
+- Handle data updates
+  - FIXME: on MODEL: existing record will have an ID but incoming record will not for UPDATE
+- Setup DB
+- GET events data
+- fix the update models function trafficEvents.update > bun run services/trafficEvents
 - Write a readme
 - fix db config
 - create a db: seattle_traffic_events / seattle_traffic_events_test
