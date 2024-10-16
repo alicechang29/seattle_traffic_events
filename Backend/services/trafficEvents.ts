@@ -1,9 +1,7 @@
 import { parseNFLData } from "../helpers/parseNFLData";
 import { BadRequestError } from "../expressError";
-// import { trafficEvent } from "../models/trafficEvents";
-import type { espnEvent, tTrafficEvent } from "../types";
+import type { espnEvent } from "../types";
 import { TrafficEvent } from "../models/trafficEvents";
-import e from "express";
 
 const ESPN_BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
 
@@ -61,6 +59,7 @@ export const syncSeahawksData = async (): Promise<any> => {
     for (const record of fetchedSeahawksData) {
       console.log("RECORD", record);
       try {
+        //for each record, determine if it already exists
         const existingEvent = await TrafficEvent.findEventByNameAndDate(
           record.name,
           new Date(record.startDate)
@@ -68,17 +67,20 @@ export const syncSeahawksData = async (): Promise<any> => {
         console.log("existing event", existingEvent);
 
         if (existingEvent) {
+          //if so, update that event in the DB
           await TrafficEvent.updateEvent(existingEvent.id, record);
           console.log(`Updated event with ID: ${existingEvent.id}`);
           summary.updated++;
+
         } else {
+          //else create a new event in the DB
           await TrafficEvent.create(record);
           console.log(`Created event: ${record}`);
           summary.created++;
         }
 
       } catch (e) {
-        console.error("Seahawks data sync failed at the service level", e);
+        console.error("Data sync failed:", e);
       }
     }
   } catch (e) {
@@ -87,5 +89,5 @@ export const syncSeahawksData = async (): Promise<any> => {
   console.log(`Sync completed: ${summary.updated} updated, ${summary.created} created.`);
   return summary;
 };
-//TODO: fix the trafficEvents.update fn
+
 console.log("TESTING SYNC", await syncSeahawksData());
