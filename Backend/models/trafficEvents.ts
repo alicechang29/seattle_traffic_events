@@ -120,9 +120,13 @@ export class TrafficEvent {
         FROM traffic_events
         WHERE name = $1 AND start_date = $2`, [name, startDate]);
 
-    const trafficEvent = result.rows[0];
+    const event = result.rows[0];
 
-    return trafficEvent;
+    if (!event) {
+      throw new NotFoundError(`No event named: ${name} starting on ${startDate}`);
+    }
+
+    return event;
   }
 
 

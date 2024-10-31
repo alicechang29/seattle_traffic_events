@@ -26,7 +26,7 @@ router.get("/today", async (req, res) => {
 
   } catch (e) {
     console.error("Issue with fetching today's events", e);
-    throw new BadRequestError();
+    // throw new BadRequestError();
   }
 
 });

@@ -32,6 +32,8 @@ Run a file:
 - write tests for all of services and models
   don't move on until that's done...
 
+- add error logging
+
 ## API Endpoints Flow
 
 Fetching new data from ESPN probably only happens 1x a season.
