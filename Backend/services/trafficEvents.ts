@@ -18,7 +18,7 @@ const ESPN_BASE_API_URL = `https://site.api.espn.com/apis/site/v2/sports`;
   },...
 ]
 */
-export const getSeahawksDataFromEspn = async (): Promise<any> => {
+const getSeahawksDataFromEspn = async (): Promise<any> => {
   console.log("Services/getSeahawksDataFromEspn");
 
   const teamId: number = 26;
@@ -37,6 +37,7 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
 
   } catch (e) {
     console.error("Error fetching data from ESPN API:", e);
+    //TODO: insert logging here
     throw new BadRequestError();
   }
 };
@@ -47,13 +48,14 @@ export const getSeahawksDataFromEspn = async (): Promise<any> => {
  * Creates new records in DB if event is new.
  * Returns...?
  */
-export const syncSeahawksData = async (): Promise<any> => {
+const syncSeahawksData = async (): Promise<any> => {
   console.log("Services/syncSeahawksData");
 
   const summary = { updated: 0, created: 0 };
 
   try {
     //get the new data
+    //FIXME: this shouldn't be called here
     const fetchedSeahawksData: espnEvent[] = await getSeahawksDataFromEspn();
 
     for (const record of fetchedSeahawksData) {
