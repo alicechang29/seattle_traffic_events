@@ -1,7 +1,7 @@
 import db from "../db.ts";
 import { BadRequestError, NotFoundError } from "../expressError.ts";
 import type { espnEvent } from "../types.ts";
-import { sqlForPartialUpdate } from "../helpers/sqlForPartialUpdate.ts";
+import { sqlForPartialUpdate } from "../helpers/sqlQueryConstructors.ts";
 export class TrafficEvent {
 
   /**Create an event (from data), update db, return new event data.
@@ -78,13 +78,73 @@ export class TrafficEvent {
 
     return result.rows;
   }
+  /** Constructs a WHERE clause for SQL statements.
+   * searchQuery = {
+   * status = ['STATUS_IN_PROGRESS', 'STATUS_SCHEDULED'],
+   * startDate: '2024-09-08',
+   * endDate: '2024-10-06' }
+   *Outputs: a WHERE clause SQL statement object can be used to query trafficEvents model
+    {
+      whereStatement: ''status_value' IN ($1, $2) AND 'start_date' BETWEEN $3 AND $4`
+      values: ['STATUS_IN_PROGRESS', 'STATUS_SCHEDULED', '2024-09-08', '2024-10-10']
+    }
+   */
+  static constructWhereClause(searchQuery: Record<string, any>) {
+    // FIXME: fix the type of searchQuery
+    const keys = Object.keys(searchQuery);
+    const whereClauseInputs: string[] = [];
+    const whereValues: string[] = [];
 
-  /**Gets all events that have a status of scheduled or in progress.
-   *
+    let i = 0;
+    let j = 1;
+
+    while (i < keys.length) {
+      if (searchQuery.status.length > 0) {
+        //status would come as an array
+        let statusIndexes: string[] = [];
+        for (let statusValue of searchQuery.status) {
+          statusIndexes.push(`$${j}`);
+          whereValues.push(statusValue);
+          j++;
+        }
+        const statusStatement = `status_value IN (` + statusIndexes.join(", ") + ')';
+        whereClauseInputs.push(statusStatement);
+        i++;
+      }
+      // TODO: add back endDate into the route - today = +1day
+
+      if (searchQuery.startDate.length > 0) {
+        whereClauseInputs.push(`start_date BETWEEN $${j}`);
+        whereValues.push(searchQuery.startDate);
+        j++;
+        i++;
+      }
+
+      if (searchQuery.endDate.length > 0) {
+        whereClauseInputs.push(`$${j}`);
+        whereValues.push(searchQuery.endDate);
+        j++;
+        i++;
+      }
+    }
+    const whereStatement: string = whereClauseInputs.join(" AND ");
+
+    return {
+      whereStatement,
+      values: whereValues
+    };
+
+  }
+
+  /**Gets all events by status
+   * Allowed status values: 'STATUS_SCHEDULED', 'STATUS_IN_PROGRESS', 'STATUS_COMPLETED'
    * Returns [{name,startDate,shortName,statusValue,statusCompleted,venue,zipcode},...]
   */
-  static async getScheduledInProgressEvents(): Promise<any> {
-    console.log("models/TrafficEvent/getScheduledInProgressEvents");
+  static async getEventsByStatusAndDates({ whereStatement, values }): Promise<any> {
+    // FIXME: not sure how declare the type here
+
+    console.log("models/TrafficEvent/getEventsByStatusAndDates");
+    //FIXME: add in constructing where clause bc status is now going to be an array
 
     const result = await db.query(`
       SELECT id,
@@ -96,15 +156,20 @@ export class TrafficEvent {
               venue,
               zipcode
       FROM traffic_events
-      WHERE status_value IN ($1, $2)`, ['STATUS_SCHEDULED', 'STATUS_IN_PROGRESS']
+      WHERE ${whereStatement}
+      ORDER BY start_date`,
+      values
     );
+
+    if (result.rows.length === 0) throw new NotFoundError("No events found.");
 
     return result.rows;
   }
 
   /**Find event by name and date
    * Returns {name,startDate,shortName,statusValue,statusCompleted,venue,zipcode}
-   * or undefined
+   * or throws error
+   * Used for syncing new ESPN data with existing DB records
    */
   static async findEventByNameAndDate(name: string, startDate: Date): Promise<any> {
     console.log("models/TrafficEvent/findEventByNameAndDate");
@@ -176,5 +241,14 @@ export class TrafficEvent {
 
 
 // console.log("GET EVENTS", await TrafficEvent.getEvents());
-// console.log("SCHEDULED EVENTS", await TrafficEvent.getScheduledInProgressEvents());
 // console.log("find by name and date", await TrafficEvent.findEventByNameAndDate("chicken", new Date("2024-09-08T13:05:00-07:00")));
+
+const searchQuery = {
+  status: ['STATUS_SCHEDULED'],
+  startDate: '2024-09-08',
+  endDate: '2024-11-30'
+};
+
+const constructedWhere = TrafficEvent.constructWhereClause(searchQuery);
+// console.log("!!constructedWhere", constructedWhere);
+console.log(await TrafficEvent.getEventsByStatusAndDates(constructedWhere));
