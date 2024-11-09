@@ -15,6 +15,21 @@ Run a file:
 
 ---
 
+### Process for Syncing Data from ESPN
+
+1. Cronjob - fetches data from ESPN API on some time basis (1/day)
+   (Service/get Data ) -- left TODO: setup the cronjob on sync
+2. After new data is fetched, call fn to sync the data with DB
+   (Model)
+
+### Process for processing client requests
+
+1. Client makes request
+2. Routes forwards request to controller
+3. Controller handles request (fetch data from past day)
+4. Controller fetches data from DB and filters it
+5. Controller returns data to user
+
 ## START
 
 - remove Zipcode from DB

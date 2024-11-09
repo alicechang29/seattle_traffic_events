@@ -1,6 +1,6 @@
 import db from "../db.ts";
 import { BadRequestError, NotFoundError } from "../expressError.ts";
-import type { espnEvent } from "../types.ts";
+import type { espnEvent, WhereStatementParams } from "../types.ts";
 import { sqlForPartialUpdate } from "../helpers/sqlQueryConstructors.ts";
 export class TrafficEvent {
 
@@ -22,27 +22,18 @@ export class TrafficEvent {
 
     console.log("models/TrafficEvent/create");
 
-    const duplicateCheck = await db.query(`
-        SELECT id, name, start_date
-        FROM traffic_events
-        WHERE name = $1 AND start_date = $2`, [name, startDate]);
-
-    //TODO: check if this is returning an ID
-    if (duplicateCheck.rows[0]) {
-      const dupeEvent = duplicateCheck.rows[0];
-      throw new BadRequestError(`${dupeEvent.id}`);
-    }
-
     const result = await db.query(`
                 INSERT INTO traffic_events (
-                name,
-                start_date,
-                short_name,
-                status_value,
-                status_completed,
-                venue,
-                zipcode)
+                  name,
+                  start_date,
+                  short_name,
+                  status_value,
+                  status_completed,
+                  venue,
+                  zipcode)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
+                ON CONFLICT(name, start_date)
+                DO NOTHING
                 RETURNING
                     id,
                     name,
@@ -140,10 +131,9 @@ export class TrafficEvent {
    * Allowed status values: 'STATUS_SCHEDULED', 'STATUS_IN_PROGRESS', 'STATUS_COMPLETED'
    * Returns [{name,startDate,shortName,statusValue,statusCompleted,venue,zipcode},...]
   */
-  static async getEventsByStatusAndDates({ whereStatement, values }): Promise<any> {
-    // FIXME: not sure how declare the type here
-
+  static async getEventsByStatusAndDates({ whereStatement, values }: WhereStatementParams): Promise<any> {
     console.log("models/TrafficEvent/getEventsByStatusAndDates");
+
     //FIXME: add in constructing where clause bc status is now going to be an array
 
     const result = await db.query(`

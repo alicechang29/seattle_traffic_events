@@ -1,8 +1,15 @@
 import type { espnEvent } from "../types";
 
-function filterEspnDataByDate(data: espnEvent, start: Date, end: Date) {
+/** Given pre-fetched data that contains:
+ *
+ * filter data by start date
+ *
+ * @param data
+ * @param start
+ */
+function filterEspnDataByDate(data: espnEvent, start: Date) {
 
-  //exclude events where statusValue = "STATUS_COMPLETED"
+  //fetch all events where statusValue != "STATUS_COMPLETED"
 
 }
 

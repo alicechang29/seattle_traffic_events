@@ -1,7 +1,6 @@
 export type ErrorMessage = string;
 export type ErrorStatus = number;
 export type espnAPIData = Record<string, any>;
-
 export interface espnEvent {
   name: string,
   startDate: Date,
@@ -52,3 +51,9 @@ export interface EspnNFLCompetition {
     };
   };
 }
+
+
+export type WhereStatementParams = {
+  whereStatement: string;
+  values: string[];
+};
